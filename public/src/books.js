@@ -19,19 +19,23 @@ function partitionBooksByBorrowedStatus(books) {
   return borrowedStats;
 };
 
+// helper function 
+function findAccountById(accounts, id) {
+  return accounts.find((account) => account.id === id);
+}
+
 function getBorrowersForBook(book, accounts) {
-  let borrowed = book.borrows
-  let result = borrowed.map((status) => {
-    let borrowersInfo = findAuthorById(accounts, status.id); //passes in account instead of author, id from map
-    borrowersInfo.returned = status.returned;
-    return borrowersInfo;
-  }).slice(0, 10) //cut off after tenth
-  return result;
-};
+  return book.borrows.map(borrow => {
+      let account = findAccountById(accounts, borrow.id);
+      account.returned = borrow.returned;
+      return account;
+  }).slice(0, 10);
+}
 
 module.exports = {
   findAuthorById,
   findBookById,
   partitionBooksByBorrowedStatus,
-  getBorrowersForBook,
+  findAccountById,
+  getBorrowersForBook 
 };
